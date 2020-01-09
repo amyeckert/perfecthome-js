@@ -140,8 +140,8 @@ var donald = {
 }
 characters.push(bob, joe, sally, donald);
 
-var weapons = [];
-weapons.push('knife', 'gun', 'idiocy', 'snowballs', 'hot sauce', 'kindness');
+// var weapons = [];
+// weapons.push('knife', 'gun', 'idiocy', 'snowballs', 'hot sauce', 'kindness');
 
 var rooms = [];
 rooms.push('bathroom', 'study', 'garage', 'kitchen', 'mud room');
@@ -272,24 +272,7 @@ var [{color: color1}, {color: color2}] = suspects;
 /*
  * 
 */
-function CreateSuspectObjects(name) {
-    return {
-        name: name,
-        color: name.split(' ')[1],
-        // ES6: a function can be added as a method on an object, don't need keyword: 
-        speak() {
-            console.log('my name is ', name);
-        }
-    };
-};
 
-var suspects = ['Miss Scarlet', 'Colonel Mustard', 'Mr. White', ...];
-
-//  
-CreateSuspectObjects(suspects[0]);
-
-// CREATE LIST OF OBJECTS that each have a name, a function.
-var suspectsList = [];
 
 //Looping with for()
 for(var i = 0; i < suspects.length; i++) {
@@ -297,13 +280,84 @@ for(var i = 0; i < suspects.length; i++) {
     suspectsList.push(CreateSuspectObjects([i]));
 }
 
-// looping with -.each, underscore is abstracting a loop into a function,
-_.each(suspects, function(name)) {
-    suspectsList.push(CreateSuspectObjects(name));
-}
+// From this library: https://underscorejs.org/#each similar to lodash.js, which, meh, I'd rather use vanilla. But notes...
+// looping with -.each, 
+// _.each(list, iteratee, [context])
 
-_.each(data, callback()); // this is a function that takes in an array and runs a callback function on it. Fewer mistakes. easier. https://underscorejs.org/#each
+// _.each(suspects, function(name) {
+//     suspectsList.push(CreateSuspectObjects(name));
+// });
+
+// _.each(data, callback()); // this is a function that takes in an array and runs a callback function on it. 
 // vs
-[array].foreach(function()); //this is a method on an array
+// [array].foreach(function()); //this is a method on an array
+
+let list = ['sally', 'walter', 'piggy'];
+
+// the guts of _.each(), Works for arrays AND objects
+_.each(list, callback() {
+    if(Array.isArray(list)) {
+        // arrays use for loop
+        for(var i = 0; i < list.length; i++) {
+            // call callback with a list item
+            // with _.each(value, index, list);
+            callback(list[i], i, list); // arrays use index numbers
+        }
+    } else { // objects use for in loop
+        for (var key in list) {
+            callback(list[key], key, list); // objects use keys
+        }
+        // call callback with a list item
+    }
+});
 
 
+_.each(['sally', 'walter', 'piggy'], function(name, i list) {
+    if(list[i + 1]) {
+        console.log(name, ' is younger than', list[I + 1]);
+    } else {
+    console.log(name, 'is the oldest');
+    }
+});
+
+// _.map(list, iteratee, [context]); returns a new array every time. 
+// Use to TRANSFORM LISTS into a new array. 
+
+let weapons = ['candlestick', 'lead pipe', 'revolver'];
+const makeBroken = function(item) {
+    return `broken ${item}`; 
+}
+// new array = originalArray.map(callback);
+let brokenWeapons = weapons.map(makeBroken);
+brokenWeapons;  // returns array :
+                // 0: "broken candlestick"
+                // 1: "broken lead pipe"
+                // 2: "broken revolver"
+
+function CreateSuspectObjects(name) {
+    return {
+        name: name,
+        color: name.split(' ')[1],
+        // ES6: a function can be added as a method on an object, doesn't need keyword
+        speak() { console.log(`my name is , ${this.name}`); }
+    };
+};
+
+var suspects = ['Miss Scarlet', 'Colonel Mustard', 'Mr. White'];
+var suspectsList = suspects.map( function(name) {
+    return CreateSuspectObjects(name);
+});
+suspectsList; // returns new array of suspect objects.
+            // 0:
+            // color: "Scarlet"
+            // name: "Miss Scarlet"
+            // speak: ƒ speak()
+            // 1:
+            // color: "Mustard"
+            // name: "Colonel Mustard"
+            // speak: ƒ speak()
+            // 2:
+            // color: "White"
+            // name: "Mr. White"
+            // speak: ƒ speak()
+            
